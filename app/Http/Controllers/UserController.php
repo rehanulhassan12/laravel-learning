@@ -57,7 +57,7 @@ class UserController extends Controller
     {
         //
          $user = User::findOrFail($id);
-    return view('users.edit', compact('user'));
+    return view('users.show', compact('user'));
     }
 
     /**
