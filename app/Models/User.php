@@ -45,4 +45,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function roles()
+{
+    return $this->belongsToMany(Role::class, 'role_user');
+}
+
+
+// Helper method to check if user has a role
+public function hasRole($roleName)
+{
+    return $this->roles->pluck('name')->contains($roleName);
+}
+
+// Helper method to check if user has access to a screen
+public function canAccessScreen(string $screen): bool
+{
+    return $this->roles()
+        ->whereHas('screens', fn($q) => $q->where('name', $screen))
+        ->exists();
+}
+
+
 }

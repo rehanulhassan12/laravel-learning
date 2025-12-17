@@ -7,10 +7,13 @@ use App\Models\School;
 use App\Models\SchoolGroup;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+    use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 
 class SchoolController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -27,6 +30,7 @@ class SchoolController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', School::class);
         $groups = SchoolGroup::all();
         return view("schools.create", compact("groups"));
     }

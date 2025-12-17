@@ -5,6 +5,9 @@ use App\Models\SchoolGroup;
 
 use App\Http\Requests\StoreSchoolGroupRequest;
 use App\Http\Requests\UpdateSchoolGroupRequest;
+use App\Services\SchoolGroupService;
+
+
 
 use Illuminate\Http\Request;
 
@@ -13,6 +16,12 @@ class SchoolGroupController extends Controller
     /**
      * Display a listing of the resource.
      */
+    protected $service;
+
+    public function __construct(SchoolGroupService $service)
+    {
+        $this->service = $service;
+    }
    public function index()
 {
     $groups = SchoolGroup::all();
@@ -32,7 +41,7 @@ class SchoolGroupController extends Controller
      */
    public function store(StoreSchoolGroupRequest $request)
 {
-    SchoolGroup::create($request->validated());
+    $group = $this->service->create($request->validated());
 
     return redirect()
         ->route('school_groups.index')

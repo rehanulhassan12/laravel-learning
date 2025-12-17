@@ -27,6 +27,10 @@
                 </li>
             </ul>
             <span class="navbar-brand">Admin Dashboard</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
         </nav>
 
         <!-- Sidebar -->
@@ -39,43 +43,51 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
 
-                        <li class="nav-item">
-                            <a href="{{ route('users.index') }}"
-                                class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Users</p>
-                            </a>
+                        @if (auth()->user()->canAccessScreen('users'))
+                            <li class="nav-item">
+                                <a href="{{ route('users.index') }}"
+                                    class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Users</p>
+                                </a>
+                            </li>
+                        @endif
 
-                        </li>
+                        @if (auth()->user()->canAccessScreen('school_groups'))
+                            <li class="nav-item">
+                                <a href="{{ route('school_groups.index') }}"
+                                    class="nav-link {{ request()->is('school-groups*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-layer-group"></i>
+                                    <p>School Groups</p>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="nav-item">
-                            <a href="{{ route('school_groups.index') }}"
-                                class="nav-link {{ request()->is('school_groups*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-layer-group"></i>
-                                <p>School Groups</p>
-                            </a>
-                        </li>
+                        @if (auth()->user()->canAccessScreen('schools'))
+                            <li class="nav-item">
+                                <a href="{{ route('schools.index') }}"
+                                    class="nav-link {{ request()->is('schools*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-school"></i>
+                                    <p>Schools</p>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="nav-item">
-                            <a href="{{ route('schools.index') }}"
-                                class="nav-link {{ request()->is('schools*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-school"></i>
-                                <p>Schools</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('classes.index') }}"
-                                class="nav-link {{ request()->is('classes*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chalkboard"></i>
-                                <p>Classes</p>
-                            </a>
-                        </li>
+                        @if (auth()->user()->canAccessScreen('classes'))
+                            <li class="nav-item">
+                                <a href="{{ route('classes.index') }}"
+                                    class="nav-link {{ request()->is('classes*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chalkboard"></i>
+                                    <p>Classes</p>
+                                </a>
+                            </li>
+                        @endif
 
                     </ul>
                 </nav>
             </div>
         </aside>
+
 
         <!-- Content Wrapper -->
         <div class="content-wrapper">

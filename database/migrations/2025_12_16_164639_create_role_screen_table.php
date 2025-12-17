@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('school_groups', function (Blueprint $table) {
-            
-           
-            $table->string('name');
-          
-        });
+       Schema::create('role_screen', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('role_id')->constrained()->onDelete('cascade');
+    $table->foreignId('screen_id')->constrained()->onDelete('cascade');
+    $table->timestamps();
+});
     }
 
     /**
@@ -24,9 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('school_groups', function (Blueprint $table) {
-            //
-                $table->dropColumn('name');
-        });
+        Schema::dropIfExists('role_screen');
     }
 };
