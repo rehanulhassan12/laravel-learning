@@ -64,6 +64,22 @@ public function canAccessScreen(string $screen): bool
         ->whereHas('screens', fn($q) => $q->where('name', $screen))
         ->exists();
 }
+public function firstAccessibleScreen()
+{
+    return $this->roles()
+                ->with('screens')
+                ->get()
+                ->pluck('screens')
+                ->flatten()
+                ->first()?->name ?? '/';
+}
+
+
+public function isAdmin(): bool
+{
+    return $this->roles()->where('name', 'admin')->exists();
+}
+
 
 
 }

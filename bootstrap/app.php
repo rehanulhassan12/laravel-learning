@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\CheckScreenAccess;
+use App\Http\Middleware\IsAdmin;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register route middleware alias
         $middleware->alias([
             'screen' => CheckScreenAccess::class,
+             'is.admin' => \App\Http\Middleware\IsAdmin::class,
+
         ]);
     })
     ->withExceptions(function ($exceptions) {

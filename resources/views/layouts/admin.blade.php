@@ -14,7 +14,6 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -26,11 +25,15 @@
                     </a>
                 </li>
             </ul>
+
             <span class="navbar-brand">Admin Dashboard</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
+
+            @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-link">Logout</button>
+                </form>
+            @endauth
         </nav>
 
         <!-- Sidebar -->
@@ -43,51 +46,75 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
 
-                        @if (auth()->user()->canAccessScreen('users'))
-                            <li class="nav-item">
-                                <a href="{{ route('users.index') }}"
-                                    class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-users"></i>
-                                    <p>Users</p>
-                                </a>
-                            </li>
-                        @endif
+                        @auth
+                            @if (optional(auth()->user())->canAccessScreen('users'))
+                                <li class="nav-item">
+                                    <a href="{{ route('users.index') }}"
+                                        class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-users"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                            @endif
 
-                        @if (auth()->user()->canAccessScreen('school_groups'))
-                            <li class="nav-item">
-                                <a href="{{ route('school_groups.index') }}"
-                                    class="nav-link {{ request()->is('school-groups*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-layer-group"></i>
-                                    <p>School Groups</p>
-                                </a>
-                            </li>
-                        @endif
+                            @if (optional(auth()->user())->canAccessScreen('school_groups'))
+                                <li class="nav-item">
+                                    <a href="{{ route('school_groups.index') }}"
+                                        class="nav-link {{ request()->is('school-groups*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-layer-group"></i>
+                                        <p>School Groups</p>
+                                    </a>
+                                </li>
+                            @endif
 
-                        @if (auth()->user()->canAccessScreen('schools'))
-                            <li class="nav-item">
-                                <a href="{{ route('schools.index') }}"
-                                    class="nav-link {{ request()->is('schools*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-school"></i>
-                                    <p>Schools</p>
-                                </a>
-                            </li>
-                        @endif
+                            @if (optional(auth()->user())->canAccessScreen('schools'))
+                                <li class="nav-item">
+                                    <a href="{{ route('schools.index') }}"
+                                        class="nav-link {{ request()->is('schools*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-school"></i>
+                                        <p>Schools</p>
+                                    </a>
+                                </li>
+                            @endif
 
-                        @if (auth()->user()->canAccessScreen('classes'))
-                            <li class="nav-item">
-                                <a href="{{ route('classes.index') }}"
-                                    class="nav-link {{ request()->is('classes*') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-chalkboard"></i>
-                                    <p>Classes</p>
-                                </a>
-                            </li>
-                        @endif
+                            @auth
+                                @if (auth()->user()->isAdmin() && auth()->user()->canAccessScreen('roles'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('roles.index') }}"
+                                            class="nav-link {{ request()->is('roles*') ? 'active' : '' }}">
+                                            <i class="nav-icon fas fa-user-shield"></i>
+                                            <p>Roles</p>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
+                            @auth
+                                @if (auth()->user()->isAdmin() && auth()->user()->canAccessScreen('roles'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('screens.index') }}"
+                                            class="nav-link {{ request()->is('screens*') ? 'active' : '' }}">
+                                            <i class="nav-icon fas fa-user-shield"></i>
+                                            <p>Screens</p>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
+
+                            @if (optional(auth()->user())->canAccessScreen('classes'))
+                                <li class="nav-item">
+                                    <a href="{{ route('classes.index') }}"
+                                        class="nav-link {{ request()->is('classes*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-chalkboard"></i>
+                                        <p>Classes</p>
+                                    </a>
+                                </li>
+                            @endif
+                        @endauth
 
                     </ul>
                 </nav>
             </div>
         </aside>
-
 
         <!-- Content Wrapper -->
         <div class="content-wrapper">

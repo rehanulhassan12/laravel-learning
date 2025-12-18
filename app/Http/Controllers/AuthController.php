@@ -21,7 +21,8 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended('/');
+           return redirect()->intended(auth()->user()->firstAccessibleScreen());
+
         }
 
         return back()->withErrors(['email'=>'Invalid credentials']);
@@ -52,7 +53,8 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/');
+        return redirect()->intended(auth()->user()->firstAccessibleScreen());
+
     }
 }
 
