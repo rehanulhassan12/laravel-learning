@@ -21,33 +21,40 @@ class StoreClassRoomRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-  public function rules(): array
+public function rules(): array
 {
-    
-return [
-    'school_id' => ['required', 'exists:schools,id'],
+    return [
+        'school_id' => ['required', 'exists:schools,id'],
 
-    'name' => [
-        'required',
-        'string',
-        'max:255',
-    ],
+        'name' => ['required', 'string', 'max:255'],
 
-    'section' => [
-        'nullable',
-        'string',
-        'max:50',
-        Rule::unique('classes')->where(fn ($query) =>
-            $query->where('school_id', $this->input('school_id'))
-                  ->where('name', $this->input('name'))
-        ),
-        Rule::requiredIf(function () {
-            return ClassRoom::where('school_id', $this->input('school_id'))
-                              ->where('name', $this->input('name'))
-                              ->exists();
-        }),
-    ],
-];
+        'session_year' => [
+            'required',
+            'string',
+            'max:9', // e.g. 2023-2024
+        ],
+
+        'section' => [
+            'nullable',
+            'string',
+            'max:50',
+
+            // unique per school + name + session
+            Rule::unique('classes')->where(fn ($query) =>
+                $query->where('school_id', $this->input('school_id'))
+                      ->where('name', $this->input('name'))
+                      ->where('session_year', $this->input('session_year'))
+            ),
+
+            // section required if same class exists in same school + session
+            Rule::requiredIf(function () {
+                return ClassRoom::where('school_id', $this->input('school_id'))
+                    ->where('name', $this->input('name'))
+                    ->where('session_year', $this->input('session_year'))
+                    ->exists();
+            }),
+        ],
+    ];
 }
 
 

@@ -22,9 +22,8 @@
                 @method('PUT')
 
                 <div class="form-group mb-2">
-                    <label for="school_id">School <span class="text-danger">*</span></label>
+                    <label>School *</label>
                     <select name="school_id" class="form-control" required>
-                        <option value="">Select School</option>
                         @foreach ($schools as $school)
                             <option value="{{ $school->id }}"
                                 {{ old('school_id', $class->school_id) == $school->id ? 'selected' : '' }}>
@@ -35,19 +34,30 @@
                 </div>
 
                 <div class="form-group mb-2">
-                    <label for="name">Class Name <span class="text-danger">*</span></label>
+                    <label>Class Name *</label>
                     <input type="text" name="name" class="form-control" value="{{ old('name', $class->name) }}"
                         required>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label for="section">Section</label>
+                    <label>Section</label>
                     <input type="text" name="section" class="form-control" value="{{ old('section', $class->section) }}">
-
                 </div>
 
-                <button type="submit" class="btn btn-warning mt-2">Update Class</button>
-                <a href="{{ route('classes.index') }}" class=" pl- btn btn-secondary mt-2 ml-4">Back</a>
+                <div class="form-group mb-2">
+                    <label>Session *</label>
+                    <select name="session_year" class="form-control" required>
+                        @foreach (['2022-2023', '2023-2024', '2024-2025'] as $session)
+                            <option value="{{ $session }}"
+                                {{ old('session_year', $class->session_year) == $session ? 'selected' : '' }}>
+                                {{ $session }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button class="btn btn-warning">Update</button>
+                <a href="{{ route('classes.index') }}" class="btn btn-secondary ml-2">Back</a>
             </form>
         </div>
     </div>

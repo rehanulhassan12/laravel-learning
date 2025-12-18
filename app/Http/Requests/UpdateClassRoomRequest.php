@@ -21,43 +21,43 @@ class UpdateClassRoomRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
+public function rules(): array
 {
-    $id = $this->route('class')->id; // match route param
-return [
-    'school_id' => ['required', 'exists:schools,id'],
+    $id = $this->route('class')->id;
 
-    'name' => [
-        'required',
-        'string',
-        'max:255',
-    ],
+    return [
+        'school_id' => ['required', 'exists:schools,id'],
 
-    'section' => [
-        'nullable',
-        'string',
-        'max:50',
+        'name' => ['required', 'string', 'max:255'],
 
-        // unique per school + class name, ignore current record
-        Rule::unique('classes')->where(fn ($query) =>
-            $query->where('name', $this->input('name'))
-                  ->where('school_id', $this->input('school_id'))
-        )->ignore($id),
+        'session_year' => [
+            'required',
+            'string',
+            'max:9',
+        ],
 
-        // required if another class with same name exists in the same school (ignoring current)
-        Rule::requiredIf(function () use ($id) {
-            return ClassRoom::where('name', $this->input('name'))
-                            ->where('school_id', $this->input('school_id'))
-                            ->where('id', '!=', $id)
-                            ->exists();
-        }),
-    ],
-];
+        'section' => [
+            'nullable',
+            'string',
+            'max:50',
 
+            // unique per school + name + session (ignore current)
+            Rule::unique('classes')->where(fn ($query) =>
+                $query->where('school_id', $this->input('school_id'))
+                      ->where('name', $this->input('name'))
+                      ->where('session_year', $this->input('session_year'))
+            )->ignore($id),
 
-
-
-
+            // required if another class exists with same name + school + session
+            Rule::requiredIf(function () use ($id) {
+                return ClassRoom::where('school_id', $this->input('school_id'))
+                    ->where('name', $this->input('name'))
+                    ->where('session_year', $this->input('session_year'))
+                    ->where('id', '!=', $id)
+                    ->exists();
+            }),
+        ],
+    ];
 }
 
 }

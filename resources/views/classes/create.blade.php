@@ -21,7 +21,7 @@
                 @csrf
 
                 <div class="form-group mb-2">
-                    <label for="school_id">School <span class="text-danger">*</span></label>
+                    <label>School *</label>
                     <select name="school_id" class="form-control" required>
                         <option value="">Select School</option>
                         @foreach ($schools as $school)
@@ -33,18 +33,30 @@
                 </div>
 
                 <div class="form-group mb-2">
-                    <label for="name">Class Name <span class="text-danger">*</span></label>
+                    <label>Class Name *</label>
                     <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label for="section">Section</label>
+                    <label>Section</label>
                     <input type="text" name="section" class="form-control" value="{{ old('section') }}">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Add Class</button>
-                <a href="{{ route('classes.index') }}" class=" pl- btn btn-secondary mt-2 ml-4">Back</a>
+                <div class="form-group mb-2">
+                    <label>Session *</label>
+                    <select name="session_year" class="form-control" required>
+                        <option value="">Select Session</option>
+                        <option value="2022-2023" {{ old('session_year') == '2022-2023' ? 'selected' : '' }}>2022-2023
+                        </option>
+                        <option value="2023-2024" {{ old('session_year') == '2023-2024' ? 'selected' : '' }}>2023-2024
+                        </option>
+                        <option value="2024-2025" {{ old('session_year') == '2024-2025' ? 'selected' : '' }}>2024-2025
+                        </option>
+                    </select>
+                </div>
 
+                <button class="btn btn-primary">Save</button>
+                <a href="{{ route('classes.index') }}" class="btn btn-secondary ml-2">Back</a>
             </form>
         </div>
     </div>

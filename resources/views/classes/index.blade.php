@@ -18,11 +18,13 @@
                         <tr>
                             <th>ID</th>
                             <th>School</th>
-                            <th>Class Name</th>
+                            <th>Class</th>
                             <th>Section</th>
+                            <th>Session</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($classes as $class)
                             <tr>
@@ -30,19 +32,21 @@
                                 <td>{{ $class->school->name }}</td>
                                 <td>{{ $class->name }}</td>
                                 <td>{{ $class->section ?? '-' }}</td>
+                                <td>{{ $class->session_year }}</td>
                                 <td>
                                     <a href="{{ route('classes.show', $class) }}" class="btn btn-sm btn-info">View</a>
                                     <a href="{{ route('classes.edit', $class) }}" class="btn btn-sm btn-warning">Edit</a>
                                     <form action="{{ route('classes.destroy', $class) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Delete class?')">Delete</button>
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-sm btn-danger" onclick="return confirm('Delete class?')">
+                                            Delete
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>

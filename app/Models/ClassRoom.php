@@ -15,6 +15,7 @@ class ClassRoom extends Model
         'name',
         'school_id',
         'section',
+        'session_year',
 
     ];
 

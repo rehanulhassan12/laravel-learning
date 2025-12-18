@@ -29,7 +29,7 @@ class SchoolPolicy
      */
     public function create(User $user): bool
     {
-        dd($user);
+       
         return true;
     }
 
