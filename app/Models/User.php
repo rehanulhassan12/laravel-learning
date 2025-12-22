@@ -80,6 +80,10 @@ public function isAdmin(): bool
     return $this->roles()->where('name', 'admin')->exists();
 }
 
+public function student() {
+       return $this->hasOne(Student::class, 'guardian_id');
+}
+
 
 
 }

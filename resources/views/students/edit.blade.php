@@ -1,0 +1,71 @@
+@extends('layouts.admin')
+
+@section('content')
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit Student</h3>
+        </div>
+
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('students.update', $student) }}" method="POST">
+                @csrf @method('PUT')
+
+                <input name="name" class="form-control mb-2" value="{{ old('name', $student->name) }}">
+                <input name="roll_no" class="form-control mb-2" value="{{ old('roll_no', $student->roll_no) }}">
+
+                <select name="gender" class="form-control mb-2">
+                    <option value="male" {{ old('gender', $student->gender) == 'male' ? 'selected' : '' }}>Male</option>
+                    <option value="female" {{ old('gender', $student->gender) == 'female' ? 'selected' : '' }}>Female
+                    </option>
+                </select>
+
+                <input type="date" name="dob" class="form-control mb-2" value="{{ old('dob', $student->dob) }}">
+
+                <label>User (optional)</label>
+                <select name="user_id" class="form-control mb-2">
+                    <option value="">Select User</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}"
+                            {{ old('user_id', $student->user_id) == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }} ({{ $user->email }})
+                        </option>
+                    @endforeach
+                </select>
+
+                <label>Guardian</label>
+                <select name="guardian_id" class="form-control mb-2">
+                    @foreach ($guardians as $guardian)
+                        <option value="{{ $guardian->id }}"
+                            {{ old('guardian_id', $student->guardian_id) == $guardian->id ? 'selected' : '' }}>
+                            {{ $guardian->name }} - {{ $guardian->phone }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <label>Class</label>
+                <select name="class_id" class="form-control mb-2">
+                    @foreach ($classes as $class)
+                        <option value="{{ $class->id }}"
+                            {{ old('class_id', $student->class_id) == $class->id ? 'selected' : '' }}>
+                            {{ $class->school->name }} | {{ $class->name }} {{ $class->section }}
+                            ({{ $class->session_year }})
+                        </option>
+                    @endforeach
+                </select>
+
+                <button class="btn btn-warning">Update</button>
+                <a href="{{ route('students.index') }}" class="btn btn-secondary ml-2">Back</a>
+            </form>
+        </div>
+    </div>
+@endsection

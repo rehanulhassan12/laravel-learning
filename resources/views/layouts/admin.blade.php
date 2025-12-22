@@ -99,6 +99,28 @@
                                     </li>
                                 @endif
                             @endauth
+                            @auth
+                                @if (auth()->user()->isAdmin() && auth()->user()->canAccessScreen('gaurdians'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('guardians.index') }}"
+                                            class="nav-link {{ request()->is('screens*') ? 'active' : '' }}">
+                                            <i class="nav-icon fas fa-user-shield"></i>
+                                            <p>Gaurdians</p>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
+                            @auth
+                                @if (auth()->user()->isAdmin() && auth()->user()->canAccessScreen('students'))
+                                    <li class="nav-item">
+                                        <a href="{{ route('students.index') }}"
+                                            class="nav-link {{ request()->is('screens*') ? 'active' : '' }}">
+                                            <i class="nav-icon fas fa-user-shield"></i>
+                                            <p>Students</p>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endauth
 
                             @if (optional(auth()->user())->canAccessScreen('classes'))
                                 <li class="nav-item">

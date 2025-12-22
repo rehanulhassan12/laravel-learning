@@ -10,6 +10,8 @@ use App\Http\Controllers\ClassRoomController;
 // use App\Http\Controllers\RoleScreenController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScreenController;
+use App\Http\Controllers\GuardianController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +22,15 @@ use App\Http\Controllers\ScreenController;
 // Public route
 Route::get('/', fn() => view('welcome'));
 
+
+
+
 // Auth routes
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+
 
 Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('register', [AuthController::class, 'register']);
@@ -40,6 +47,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('classes', ClassRoomController::class)
         ->middleware('screen:classes');
+
+        Route::middleware('auth')->get('/student/dashboard', [StudentController::class, 'dashboard'])->name('students.dashboard');
+
+
 });
 
 // Admin-only routes
@@ -47,6 +58,8 @@ Route::middleware(['auth', 'is.admin'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('screens', ScreenController::class);
 Route::resource('users', UserController::class);
+Route::resource('guardians', GuardianController::class);
+Route::resource('students', StudentController::class);
 
 
     // // User roles management
@@ -61,3 +74,4 @@ Route::resource('users', UserController::class);
     // Route::put('roles/{role}/screens', [RoleScreenController::class, 'update'])
     //     ->name('roles.screens.update');
 });
+
