@@ -22,7 +22,7 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
        return [
-            'name'        => 'required|string|max:255',
+
             'roll_no'     => 'nullable|string|max:50',
             'gender'      => 'required|in:male,female',
             'dob'         => 'date',

@@ -18,21 +18,11 @@
             @endif
 
             <form action="{{ route('students.update', $student) }}" method="POST">
-                @csrf @method('PUT')
+                @csrf
+                @method('PUT')
 
-                <input name="name" class="form-control mb-2" value="{{ old('name', $student->name) }}">
-                <input name="roll_no" class="form-control mb-2" value="{{ old('roll_no', $student->roll_no) }}">
-
-                <select name="gender" class="form-control mb-2">
-                    <option value="male" {{ old('gender', $student->gender) == 'male' ? 'selected' : '' }}>Male</option>
-                    <option value="female" {{ old('gender', $student->gender) == 'female' ? 'selected' : '' }}>Female
-                    </option>
-                </select>
-
-                <input type="date" name="dob" class="form-control mb-2" value="{{ old('dob', $student->dob) }}">
-
-                <label>User (optional)</label>
-                <select name="user_id" class="form-control mb-2">
+                <label>User (required)</label>
+                <select name="user_id" class="form-control mb-2" required>
                     <option value="">Select User</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}"
@@ -42,18 +32,29 @@
                     @endforeach
                 </select>
 
+                <input name="roll_no" class="form-control mb-2" value="{{ old('roll_no', $student->roll_no) }}" required>
+
+                <select name="gender" class="form-control mb-2" required>
+                    <option value="male" {{ old('gender', $student->gender) == 'male' ? 'selected' : '' }}>Male</option>
+                    <option value="female" {{ old('gender', $student->gender) == 'female' ? 'selected' : '' }}>Female
+                    </option>
+                </select>
+
+                <input type="date" name="dob" class="form-control mb-2" value="{{ old('dob', $student->dob) }}"
+                    required>
+
                 <label>Guardian</label>
-                <select name="guardian_id" class="form-control mb-2">
+                <select name="guardian_id" class="form-control mb-2" required>
                     @foreach ($guardians as $guardian)
                         <option value="{{ $guardian->id }}"
                             {{ old('guardian_id', $student->guardian_id) == $guardian->id ? 'selected' : '' }}>
-                            {{ $guardian->name }} - {{ $guardian->phone }}
+                            {{ $guardian->name }} - {{ $guardian->phone }} ({{ $guardian->relation }})
                         </option>
                     @endforeach
                 </select>
 
                 <label>Class</label>
-                <select name="class_id" class="form-control mb-2">
+                <select name="class_id" class="form-control mb-2" required>
                     @foreach ($classes as $class)
                         <option value="{{ $class->id }}"
                             {{ old('class_id', $student->class_id) == $class->id ? 'selected' : '' }}>

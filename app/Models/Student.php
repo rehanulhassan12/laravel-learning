@@ -15,6 +15,7 @@ class Student extends Model
         'dob',
         'guardian_id',
         'class_id',
+        'user_id',
     ];
      public function guardian()
     {

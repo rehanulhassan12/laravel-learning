@@ -9,7 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+
+
     public function showLoginForm() {
+         if (auth()->check()) {
+
+        if (auth()->user()->roles->contains('name', 'student')) {
+            return redirect('/student/dashboard');
+        }
+
+        return redirect(auth()->user()->firstAccessibleScreen() ?? '/default-dashboard');
+    }
         return view('auth.login');
     }
 
@@ -19,11 +30,15 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials)){
-            $request->session()->regenerate();
-           return redirect()->intended(auth()->user()->firstAccessibleScreen());
+      if(Auth::attempt($credentials)){
+    $request->session()->regenerate();
 
-        }
+if(auth()->user()->roles->contains('name', 'student')){
+    return redirect('/student/dashboard');
+}
+
+    return redirect()->intended(auth()->user()->firstAccessibleScreen());
+}
 
         return back()->withErrors(['email'=>'Invalid credentials']);
     }

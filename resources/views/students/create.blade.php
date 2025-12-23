@@ -20,19 +20,8 @@
             <form action="{{ route('students.store') }}" method="POST">
                 @csrf
 
-                <input name="name" class="form-control mb-2" placeholder="Student Name" value="{{ old('name') }}">
-                <input name="roll_no" class="form-control mb-2" placeholder="Roll No" value="{{ old('roll_no') }}">
-
-                <select name="gender" class="form-control mb-2">
-                    <option value="">Select Gender</option>
-                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                </select>
-
-                <input type="date" name="dob" class="form-control mb-2" value="{{ old('dob') }}">
-
-                <label>User (optional)</label>
-                <select name="user_id" class="form-control mb-2">
+                <label>User (required)</label>
+                <select name="user_id" class="form-control mb-2" required>
                     <option value="">Select User</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
@@ -41,8 +30,18 @@
                     @endforeach
                 </select>
 
+                <input name="roll_no" class="form-control mb-2" placeholder="Roll No" value="{{ old('roll_no') }}" required>
+
+                <select name="gender" class="form-control mb-2" required>
+                    <option value="">Select Gender</option>
+                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                </select>
+
+                <input type="date" name="dob" class="form-control mb-2" value="{{ old('dob') }}" required>
+
                 <label>Guardian</label>
-                <select name="guardian_id" class="form-control mb-2">
+                <select name="guardian_id" class="form-control mb-2" required>
                     <option value="">Select Guardian</option>
                     @foreach ($guardians as $guardian)
                         <option value="{{ $guardian->id }}" {{ old('guardian_id') == $guardian->id ? 'selected' : '' }}>
@@ -52,7 +51,7 @@
                 </select>
 
                 <label>Class</label>
-                <select name="class_id" class="form-control mb-2">
+                <select name="class_id" class="form-control mb-2" required>
                     <option value="">Select Class</option>
                     @foreach ($classes as $class)
                         <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
