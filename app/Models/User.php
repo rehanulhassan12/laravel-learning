@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -45,59 +43,59 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relationships
+
     public function roles()
-{
-    return $this->belongsToMany(Role::class);
-}
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
 
-// Helper method to check if user has a role
-public function hasRole($roleName)
-{
-    return $this->roles->pluck('name')->contains($roleName);
-}
+    public function screens()
+    {
+        $roleIds = $this->roles()->select('roles.id')->pluck('id')->toArray();
 
-// Helper method to check if user has access to a screen
-public function canAccessScreen(string $screen): bool
-{
-    return $this->roles()
-        ->whereHas('screens', fn($q) => $q->where('name', $screen))
-        ->exists();
-}
+        return Screen::whereHas('roles', function ($q) use ($roleIds) {
+            $q->whereIn('roles.id', $roleIds);
+        });
+    }
 
-public function canAccessScreens($screenRoute)
-{
-    return $this->screens()->where('route_name', $screenRoute)->exists();
-}
-public function firstAccessibleScreen()
-{
-    return $this->roles()
-                ->with('screens')
-                ->get()
-                ->pluck('screens')
-                ->flatten()
-                ->first()?->name ?? '/';
-}
+    // Helper methods
 
+    public function hasRole($roleName)
+    {
+        return $this->roles->pluck('name')->contains($roleName);
+    }
 
-public function isAdmin(): bool
-{
-    return $this->roles()->where('name', 'admin')->exists();
-}
+    public function canAccessScreen(string $screen): bool
+    {
+        return $this->roles()
+            ->whereHas('screens', fn($q) => $q->where('name', $screen))
+            ->exists();
+    }
 
-public function student()
-{
-    return $this->hasOne(Student::class);
-}
+    public function canAccessScreens($screenRoute)
+    {
+        return $this->screens()->where('route_name', $screenRoute)->exists();
+    }
 
-public function screens()
-{
-   $roleIds = $this->roles()->select('roles.id')->pluck('id')->toArray();
+    public function firstAccessibleScreen()
+    {
+        return $this->roles()
+            ->with('screens')
+            ->get()
+            ->pluck('screens')
+            ->flatten()
+            ->first()?->name ?? '/';
+    }
 
-return Screen::whereHas('roles', function ($q) use ($roleIds) {
-    $q->whereIn('roles.id', $roleIds);
-});
-}
-
-
+    public function isAdmin(): bool
+    {
+        return $this->roles()->where('name', 'admin')->exists();
+    }
 }

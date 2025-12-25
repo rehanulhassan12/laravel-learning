@@ -2,31 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-       use HasFactory;
-        protected $fillable = [
+    use HasFactory;
+
+    protected $fillable = [
         'name',
         'roll_no',
         'gender',
         'dob',
         'guardian_id',
         'class_id',
-        'user_id',
+        'user_id', // link to User account for login
     ];
-     public function guardian()
+
+    // Relations
+    public function guardian()
     {
         return $this->belongsTo(Guardian::class);
     }
 
-      public function classRoom()
+    public function classRoom()
     {
         return $this->belongsTo(ClassRoom::class, 'class_id');
     }
-     public function user()
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
