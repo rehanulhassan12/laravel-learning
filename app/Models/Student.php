@@ -19,6 +19,11 @@ class Student extends Model
         'user_id', // link to User account for login
     ];
 
+    // App\Models\Student.php
+protected $casts = [
+    'dob' => 'date',
+];
+
     // Relations
     public function guardian()
     {

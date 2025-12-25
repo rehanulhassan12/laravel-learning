@@ -20,12 +20,14 @@ class StudentController extends Controller
         $this->middleware('is.admin')->except('dashboard');
     }
 
+    // List all students
     public function index()
     {
         $students = Student::with(['guardian', 'classRoom.school', 'user'])->get();
         return view('students.index', compact('students'));
     }
 
+    // Show create form
     public function create()
     {
         return view('students.form', [
@@ -35,6 +37,7 @@ class StudentController extends Controller
         ]);
     }
 
+    // Store new student + guardian + user
     public function store(Request $request)
     {
         $request->validate([
@@ -53,28 +56,25 @@ class StudentController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            // STUDENT USER
+            // Create student user
             $studentUser = User::create([
                 'name' => $request->name,
                 'email' => $request->user_email,
                 'password' => Hash::make('password123'),
             ]);
+            $studentRole = Role::where('name', 'student')->first();
+            if ($studentRole) $studentUser->roles()->attach($studentRole->id);
 
-            $studentUser->roles()->attach(
-                Role::where('name', 'student')->first()->id
-            );
-
-            // GUARDIAN USER
+            // Create guardian user
             $guardianUser = User::create([
                 'name' => $request->guardian_name,
                 'email' => $request->guardian_email,
                 'password' => Hash::make('password123'),
             ]);
+            $guardianRole = Role::where('name', 'guardian')->first();
+            if ($guardianRole) $guardianUser->roles()->attach($guardianRole->id);
 
-            $guardianUser->roles()->attach(
-                Role::where('name', 'guardian')->first()->id
-            );
-
+            // Create guardian record
             $guardian = Guardian::create([
                 'name' => $request->guardian_name,
                 'email' => $request->guardian_email,
@@ -84,6 +84,7 @@ class StudentController extends Controller
                 'user_id' => $guardianUser->id,
             ]);
 
+            // Create student record
             Student::create([
                 'name' => $request->name,
                 'roll_no' => $request->roll_no,
@@ -95,9 +96,10 @@ class StudentController extends Controller
             ]);
         });
 
-        return redirect()->route('students.index')->with('success', 'Student created');
+        return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
+    // Show edit form
     public function edit(Student $student)
     {
         $student->load('guardian', 'user', 'classRoom.school');
@@ -109,6 +111,7 @@ class StudentController extends Controller
         ]);
     }
 
+    // Update student + guardian + users
     public function update(Request $request, Student $student)
     {
         $request->validate([
@@ -149,6 +152,50 @@ class StudentController extends Controller
             ]);
         });
 
-        return redirect()->route('students.index')->with('success', 'Student updated');
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
+
+    // Show single student
+    public function show(Student $student)
+    {
+        $student->load('guardian', 'user', 'classRoom.school');
+
+        return view('students.show', compact('student'));
+    }
+
+    // Optional: student dashboard
+    public function dashboard()
+    {
+        $student = auth()->user()->student;
+        if (!$student) abort(403, 'Unauthorized');
+        $student->load('guardian', 'classRoom.school');
+        return view('students.dashboard', compact('student'));
+    }
+    // Delete student, guardian, and linked users
+public function destroy(Student $student)
+{
+    DB::transaction(function () use ($student) {
+
+        // Delete student user
+        if ($student->user) {
+            $student->user->roles()->detach(); // detach roles
+            $student->user->delete();
+        }
+
+        // Delete guardian user and guardian record
+        if ($student->guardian) {
+            if ($student->guardian->user) {
+                $student->guardian->user->roles()->detach();
+                $student->guardian->user->delete();
+            }
+            $student->guardian->delete();
+        }
+
+        // Delete student record
+        $student->delete();
+    });
+
+    return redirect()->route('students.index')->with('success', 'Student and linked Guardian deleted successfully.');
+}
+
 }

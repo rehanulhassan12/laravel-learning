@@ -44,7 +44,13 @@ class User extends Authenticatable
         ];
     }
 
+
     // Relationships
+
+    public function guardian()
+{
+    return $this->hasOne(Guardian::class);
+}
 
     public function roles()
     {
