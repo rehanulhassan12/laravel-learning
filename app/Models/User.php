@@ -47,7 +47,7 @@ class User extends Authenticatable
     }
     public function roles()
 {
-    return $this->belongsToMany(Role::class, 'role_user');
+    return $this->belongsToMany(Role::class);
 }
 
 
@@ -63,6 +63,11 @@ public function canAccessScreen(string $screen): bool
     return $this->roles()
         ->whereHas('screens', fn($q) => $q->where('name', $screen))
         ->exists();
+}
+
+public function canAccessScreens($screenRoute)
+{
+    return $this->screens()->where('route_name', $screenRoute)->exists();
 }
 public function firstAccessibleScreen()
 {
@@ -83,6 +88,15 @@ public function isAdmin(): bool
 public function student()
 {
     return $this->hasOne(Student::class);
+}
+
+public function screens()
+{
+   $roleIds = $this->roles()->select('roles.id')->pluck('id')->toArray();
+
+return Screen::whereHas('roles', function ($q) use ($roleIds) {
+    $q->whereIn('roles.id', $roleIds);
+});
 }
 
 

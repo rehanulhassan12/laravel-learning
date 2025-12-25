@@ -21,10 +21,13 @@ class UpdateScreenRequest extends FormRequest
      */
     public function rules(): array
     {
-           $id = $this->route('screen')->id;
-    return [
-        'name' => 'required|string|max:255|unique:screens,name,' . $id,
-    ];
+       $id = $this->route('screen')->id;
+return [
+    'name' => 'required|string|max:255|unique:screens,name,' . $id,
+    'route_name' => 'required|string|max:255|unique:screens,route_name,' . $id,
+    'icon' => 'nullable|string|max:100',
+    'parent_id' => 'nullable|exists:screens,id',
+];
 
     }
 }

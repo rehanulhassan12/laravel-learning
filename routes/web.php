@@ -10,6 +10,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScreenController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ScreensController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +46,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 // Protected routes - auth only
 Route::middleware(['auth'])->group(function () {
     Route::resource('school_groups', SchoolGroupController::class)
-        ->middleware('screen:school_groups');
+        ->middleware('screen:School Groups');
 
     Route::resource('schools', SchoolController::class)
         ->middleware('screen:schools');
@@ -56,16 +58,24 @@ Route::middleware(['auth'])->group(function () {
 
 
 });
+    // Route::resource('screens', ScreensController::class);
+
+    Route::get("/screens",[ScreensController::class,"create"]);
+
+        Route::post("/screen",[ScreensController::class,"store"])->name("screens.store");
+
 
 // Admin-only routes
 Route::middleware(['auth', 'is.admin'])->group(function () {
     Route::resource('roles', RoleController::class);
-    Route::resource('screens', ScreenController::class);
+
 Route::resource('users', UserController::class);
 Route::resource('guardians', GuardianController::class);
 Route::resource('students', StudentController::class);
 
 
 
+
 });
 
+Route::get('/users', [UserController::class, 'index'])->name('users.index');

@@ -13,7 +13,7 @@ class Role extends Model
     // Users assigned to this role
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class,'role_user');
     }
 
     // Screens assigned to this role

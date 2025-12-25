@@ -19,10 +19,13 @@ class StoreScreenRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
+   public function rules(): array
+{
+    return [
         'name' => 'required|string|max:255|unique:screens,name',
+        'route_name' => 'required|string|max:255|unique:screens,route_name',
+        'icon' => 'nullable|string|max:100',
+        'parent_id' => 'nullable|exists:screens,id',
     ];
-    }
+}
 }
