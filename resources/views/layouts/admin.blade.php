@@ -16,9 +16,7 @@
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#">
-                        <i class="fas fa-bars"></i>
-                    </a>
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
 
@@ -35,7 +33,6 @@
             </a>
 
             <div class="sidebar">
-
                 @php
                     use App\Models\Screen;
 
@@ -51,11 +48,9 @@
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false">
-
                         @foreach ($screens as $screen)
-                            @include('partials.screen-child', ['screen' => $screen])
+                            @include('partials.screen-child', ['screen' => $screen, 'roleIds' => $roleIds])
                         @endforeach
-
                     </ul>
                 </nav>
             </div>

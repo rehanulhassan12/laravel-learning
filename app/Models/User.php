@@ -97,7 +97,7 @@ class User extends Authenticatable
             ->get()
             ->pluck('screens')
             ->flatten()
-            ->first()?->name ?? '/';
+            ->first()?->route_name ?? '/';
     }
 
     public function isAdmin(): bool
