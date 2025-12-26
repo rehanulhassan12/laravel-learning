@@ -4,7 +4,10 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Schools</h3>
-            <a href="{{ route('schools.create') }}" class="btn btn-primary btn-sm">Add School</a>
+
+            @if (auth()->user()->roles->contains('name', 'admin'))
+                <a href="{{ route('schools.create') }}" class="btn btn-primary btn-sm">Add School</a>
+            @endif
         </div>
 
         <div class="card-body">
@@ -32,13 +35,21 @@
                                 <td>{{ $school->address ?? '-' }}</td>
                                 <td>
                                     <a href="{{ route('schools.show', $school) }}" class="btn btn-sm btn-info">View</a>
-                                    <a href="{{ route('schools.edit', $school) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('schools.destroy', $school) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Delete school?')">Delete</button>
-                                    </form>
+
+                                    @if (auth()->user()->roles->contains('name', 'admin'))
+                                        <a href="{{ route('schools.edit', $school) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
+
+                                        <form action="{{ route('schools.destroy', $school) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Delete school?')">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

@@ -9,35 +9,51 @@ use Illuminate\Http\Request;
 
 class ScreenController extends Controller
 {
-   public function index() {
-    $screens = Screen::with('parent')->get();
-    return view('screens.index', compact('screens'));
-}
+    // Display list of screens
+    public function index()
+    {
+        $screens = Screen::with('children')->get();
+        return view('screens.index', compact('screens'));
+    }
 
-public function create() {
-    $parents = Screen::whereNull('parent_id')->get();
-    return view('screens.create', compact('parents'));
-}
+    // Show form to create a new screen
+    public function create()
+    {
+        $parents = Screen::whereNull('parent_id')->with('children')->get();
+        return view('screens.create', compact('parents'));
+    }
 
-public function store(StoreScreenRequest $request) {
-    Screen::create($request->validated());
-    return redirect()->route('screens.index')->with('success','Screen created');
-}
+    // Store a new screen
+    public function store(StoreScreenRequest $request)
+    {
+        Screen::create($request->validated());
+        return redirect()->route('screens.index')->with('success', 'Screen created successfully');
+    }
 
-public function edit(Screen $screen) {
-    $parents = Screen::whereNull('parent_id')->where('id','!=',$screen->id)->get();
-    return view('screens.edit', compact('screen','parents'));
-}
+    // Show a specific screen
+    public function show(Screen $screen)
+    {
+        return view('screens.show', compact('screen'));
+    }
 
-public function update(UpdateScreenRequest $request, Screen $screen) {
-    $screen->update($request->validated());
-    return redirect()->route('screens.index')->with('success','Screen updated');
-}
+    // Show form to edit a screen
+    public function edit(Screen $screen)
+    {
+        $parents = Screen::whereNull('parent_id')->with('children')->get();
+        return view('screens.edit', compact('screen', 'parents'));
+    }
 
-public function destroy(Screen $screen) {
-    $screen->delete();
-    return redirect()->route('screens.index')->with('success','Screen deleted');
-}
+    // Update a screen
+    public function update(UpdateScreenRequest $request, Screen $screen)
+    {
+        $screen->update($request->validated());
+        return redirect()->route('screens.index')->with('success', 'Screen updated successfully');
+    }
 
-
+    // Delete a screen
+    public function destroy(Screen $screen)
+    {
+        $screen->delete();
+        return redirect()->route('screens.index')->with('success', 'Screen deleted successfully');
+    }
 }

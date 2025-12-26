@@ -1,7 +1,13 @@
 @php
+    use Illuminate\Support\Facades\Route;
+
     // Recursive closure to check if any descendant is active
     $isChildActive = function ($screen) use (&$isChildActive, $roleIds) {
-        if (request()->routeIs($screen->route_name . '.index')) {
+        if (
+            $screen->route_name &&
+            Route::has($screen->route_name . '.index') &&
+            request()->routeIs($screen->route_name . '.index')
+        ) {
             return true;
         }
 
@@ -23,8 +29,16 @@
 
     $hasChildren = $children->count() > 0;
     $childActive = $isChildActive($screen);
-    $isActive = request()->routeIs($screen->route_name . '.index');
-    $route = $screen->route_name ? route($screen->route_name . '.index') : 'javascript:void(0)';
+    $isActive =
+        $screen->route_name &&
+        Route::has($screen->route_name . '.index') &&
+        request()->routeIs($screen->route_name . '.index');
+
+    // Use route only if it exists, else fallback
+    $route =
+        $screen->route_name && Route::has($screen->route_name . '.index')
+            ? route($screen->route_name . '.index')
+            : 'javascript:void(0)';
 @endphp
 
 <li class="nav-item {{ $hasChildren ? 'has-treeview' : '' }} {{ $childActive ? 'menu-open' : '' }}">
@@ -43,7 +57,7 @@
         <ul class="nav nav-treeview">
 
             {{-- Parent itself as first child --}}
-            @if ($screen->route_name)
+            @if ($screen->route_name && Route::has($screen->route_name . '.index'))
                 <li class="nav-item">
                     <a href="{{ route($screen->route_name . '.index') }}"
                         class="nav-link {{ $isActive ? 'active' : '' }}">

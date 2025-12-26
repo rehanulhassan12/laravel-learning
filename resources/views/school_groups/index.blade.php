@@ -4,7 +4,10 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">School Groups</h3>
-            <a href="{{ route('school_groups.create') }}" class="btn btn-primary btn-sm">Add Group</a>
+
+            @if (auth()->user()->roles->contains('name', 'admin'))
+                <a href="{{ route('school_groups.create') }}" class="btn btn-primary btn-sm">Add Group</a>
+            @endif
         </div>
 
         <div class="card-body">
@@ -32,15 +35,20 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('school_groups.show', $group) }}" class="btn btn-sm btn-info">View</a>
-                                    <a href="{{ route('school_groups.edit', $group) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('school_groups.destroy', $group) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Delete group?')">Delete</button>
-                                    </form>
+
+                                    @if (auth()->user()->roles->contains('name', 'admin'))
+                                        <a href="{{ route('school_groups.edit', $group) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
+
+                                        <form action="{{ route('school_groups.destroy', $group) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Delete group?')">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
