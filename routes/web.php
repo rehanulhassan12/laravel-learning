@@ -60,8 +60,8 @@ Route::get('/', fn() => view('welcome'));
 });
 
 
-Route::get('/attendance/students', [AttendenceController::class, 'index'])
-    ->name('attendance.students');
+Route::get('/attendance', [AttendenceController::class, 'index'])
+    ->name('attendance.index');
 
 Route::get('/attendance/get-classes', [AttendenceController::class, 'getClasses'])
     ->name('attendance.students.getClasses');
@@ -77,6 +77,15 @@ Route::post('/attendance/student', [AttendenceController::class, 'students'])
 
 Route::post('/attendance/store', [AttendenceController::class, 'store'])
     ->name('attendance.students.store');
+
+
+    Route::get('/attendance/list', [AttendenceController::class, 'listView'])->name('attendance_list.index');
+
+Route::post('/attendance/list/data', [AttendenceController::class, 'list'])
+    ->name('attendance.list.data');
+Route::post('/attendance/update', [AttendenceController::class, 'update'])
+    ->name('attendance.update');
+
 
 
 // Admin-only routes

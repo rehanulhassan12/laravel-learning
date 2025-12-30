@@ -71,29 +71,51 @@ class AttendenceController extends Controller
     }
 
     // List attendance records
-    public function list(Request $request)
-    {
-        $query = Attendence::with('student.classRoom');
+   // Load attendance records based on filters (AJAX)
+public function list(Request $request)
+{
+    $request->validate([
+        'school_id' => 'required|exists:schools,id',
+        'class_id'  => 'required|exists:classes,id',
+        'session'   => 'required',
+        'section'   => 'required',
+        'date'      => 'required|date',
+    ]);
 
-        if ($request->filled('school_id')) {
-            $query->whereHas('student.classRoom', function ($q) use ($request) {
-                $q->where('school_id', $request->school_id);
-            });
-        }
+    $query = Attendence::with('student.classRoom')
+        ->where('date', $request->date) // filter by date
+        ->whereHas('student.classRoom', function ($q) use ($request) {
+            $q->where('school_id', $request->school_id)
+              ->where('id', $request->class_id)
+              ->where('session_year', $request->session)
+              ->where('section', $request->section);
+        });
 
-        if ($request->filled('class_id')) {
-            $query->where('class_id', $request->class_id);
-        }
+    $attendances = $query->get();
 
-        if ($request->filled('date')) {
-            $query->where('date', $request->date);
-        }
+    return view('attendence.partials.list', compact('attendances'));
+}
+// Show attendance list page with filters
+public function listView()
+{
+    $schools = School::all();
+    return view('attendence.list', compact('schools'));
+}
 
-        $attendances = $query->orderBy('date', 'desc')->get();
-        $schools = School::all();
+// Update attendance
+public function update(Request $request)
+{
+    $request->validate([
+        'attendance_id' => 'required|exists:attendances,id',
+        'status'        => 'required|in:present,absent',
+    ]);
 
-        return view('attendance.list', compact('attendances', 'schools'));
-    }
+    $attendance = Attendence::find($request->attendance_id);
+    $attendance->status = $request->status;
+    $attendance->save();
+
+    return response()->json(['success' => true]);
+}
 
     // Get classes for school (AJAX)
     public function getClasses(Request $request)
