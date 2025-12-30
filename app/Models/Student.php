@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,9 +19,9 @@ class Student extends Model
     ];
 
     // App\Models\Student.php
-protected $casts = [
-    'dob' => 'date',
-];
+    protected $casts = [
+        'dob' => 'date',
+    ];
 
     // Relations
     public function guardian()
@@ -39,4 +38,8 @@ protected $casts = [
     {
         return $this->belongsTo(User::class);
     }
+    public function attendences()
+{
+    return $this->hasMany(Attendence::class);
+}
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,17 +39,16 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
-
 
     // Relationships
 
     public function guardian()
-{
-    return $this->hasOne(Guardian::class);
-}
+    {
+        return $this->hasOne(Guardian::class);
+    }
 
     public function roles()
     {
@@ -60,6 +58,10 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class);
+    }
+    public function markedAttendances()
+    {
+        return $this->hasMany(Attendance::class, 'marked_by');
     }
 
     public function screens()

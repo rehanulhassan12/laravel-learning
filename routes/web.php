@@ -11,6 +11,7 @@ use App\Http\Controllers\ScreenController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScreensController;
+use App\Http\Controllers\AttendenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,23 @@ Route::get('/', fn() => view('welcome'));
 });
 
 
+Route::get('/attendance/students', [AttendenceController::class, 'index'])
+    ->name('attendance.students');
+
+Route::get('/attendance/get-classes', [AttendenceController::class, 'getClasses'])
+    ->name('attendance.students.getClasses');
+
+Route::get('/attendance/get-sessions', [AttendenceController::class, 'getSessions'])
+    ->name('attendance.students.getSessions');
+
+Route::get('/attendance/get-sections', [AttendenceController::class, 'getSections'])
+    ->name('attendance.students.getSections');
+
+Route::post('/attendance/student', [AttendenceController::class, 'students'])
+    ->name('attendance.student');
+
+Route::post('/attendance/store', [AttendenceController::class, 'store'])
+    ->name('attendance.students.store');
 
 
 // Admin-only routes
@@ -69,10 +87,6 @@ Route::get('/', fn() => view('welcome'));
     Route::resource('guardians', GuardianController::class);
      Route::resource('students', StudentController::class);
     Route::resource('screens', ScreenController::class);
-
-
-
-
 
 });
 
