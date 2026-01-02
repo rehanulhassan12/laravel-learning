@@ -12,6 +12,11 @@ use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScreensController;
 use App\Http\Controllers\AttendenceController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherSubjectController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +90,19 @@ Route::post('/attendance/list/data', [AttendenceController::class, 'list'])
     ->name('attendance.list.data');
 Route::post('/attendance/update', [AttendenceController::class, 'update'])
     ->name('attendance.update');
+
+    Route::resource('teachers', TeacherController::class);
+    Route::resource('subjects', SubjectController::class);
+    Route::get('teacher-subjects', [TeacherSubjectController::class, 'index'])
+    ->name('teacher-subjects.index');
+
+Route::post('teacher-subjects', [TeacherSubjectController::class, 'store'])
+    ->name('teacher-subjects.store');
+
+Route::delete('teacher-subjects/{teacher}/{subject}',
+    [TeacherSubjectController::class, 'destroy']
+)->name('teacher-subjects.destroy');
+
 
 
 
