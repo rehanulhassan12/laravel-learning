@@ -6,6 +6,7 @@
 
         <form action="{{ route('teachers.store') }}" method="POST">
             @csrf
+
             <div class="mb-3">
                 <label class="form-label">Name</label>
                 <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
@@ -33,6 +34,19 @@
             <div class="mb-3">
                 <label class="form-label">Date of Birth</label>
                 <input type="date" name="dob" class="form-control" value="{{ old('dob') }}">
+            </div>
+
+            {{-- School dropdown --}}
+            <div class="mb-3">
+                <label class="form-label">School</label>
+                <select name="school_id" class="form-select" required>
+                    <option value="">Select School</option>
+                    @foreach ($schools as $school)
+                        <option value="{{ $school->id }}" {{ old('school_id') == $school->id ? 'selected' : '' }}>
+                            {{ $school->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Add Teacher</button>

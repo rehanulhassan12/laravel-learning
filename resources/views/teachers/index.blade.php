@@ -13,6 +13,7 @@
                         <th>Phone</th>
                         <th>Gender</th>
                         <th>Specialization</th>
+                        <th>School</th> <!-- added -->
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -23,6 +24,7 @@
                             <td>{{ $t->phone }}</td>
                             <td>{{ $t->gender }}</td>
                             <td>{{ $t->specialization }}</td>
+                            <td>{{ $t->school ? $t->school->name : '-' }}</td> <!-- added -->
                             <td>
                                 <a href="{{ route('teachers.show', $t) }}" class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('teachers.edit', $t) }}" class="btn btn-sm btn-warning">Edit</a>

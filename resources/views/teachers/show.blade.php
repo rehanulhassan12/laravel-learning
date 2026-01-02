@@ -10,6 +10,7 @@
             <p><strong>Gender:</strong> {{ ucfirst($teacher->gender) }}</p>
             <p><strong>Specialization:</strong> {{ $teacher->specialization }}</p>
             <p><strong>Date of Birth:</strong> {{ $teacher->dob ?? '-' }}</p>
+            <p><strong>School:</strong> {{ $teacher->school ? $teacher->school->name : '-' }}</p> <!-- added -->
         </div>
 
         <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>

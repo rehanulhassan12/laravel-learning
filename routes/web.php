@@ -15,6 +15,8 @@ use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherSubjectController;
+use App\Http\Controllers\TimetableController;
+
 
 
 
@@ -102,6 +104,9 @@ Route::post('teacher-subjects', [TeacherSubjectController::class, 'store'])
 Route::delete('teacher-subjects/{teacher}/{subject}',
     [TeacherSubjectController::class, 'destroy']
 )->name('teacher-subjects.destroy');
+Route::resource('timetables', TimetableController::class);
+Route::get('/timetables/available-teachers', [TimetableController::class, 'availableTeachers'])
+    ->name('timetables.available-teachers');
 
 
 
