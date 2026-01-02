@@ -16,9 +16,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherSubjectController;
 use App\Http\Controllers\TimetableController;
-
-
-
+use App\Http\Controllers\ClassSubjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +41,6 @@ Route::get('/', fn() => view('welcome'));
 
 
  Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-
-
 
 
 
@@ -86,7 +82,7 @@ Route::post('/attendance/store', [AttendenceController::class, 'store'])
     ->name('attendance.students.store');
 
 
-    Route::get('/attendance/list', [AttendenceController::class, 'listView'])->name('attendance_list.index');
+Route::get('/attendance/list', [AttendenceController::class, 'listView'])->name('attendance_list.index');
 
 Route::post('/attendance/list/data', [AttendenceController::class, 'list'])
     ->name('attendance.list.data');
@@ -107,6 +103,10 @@ Route::delete('teacher-subjects/{teacher}/{subject}',
 Route::resource('timetables', TimetableController::class);
 Route::get('/timetables/available-teachers', [TimetableController::class, 'availableTeachers'])
     ->name('timetables.available-teachers');
+
+Route::get('/class-subjects', [ClassSubjectController::class, 'index'])->name('class-subjects.index');
+Route::post('/class-subjects', [ClassSubjectController::class, 'store'])->name('class-subjects.store');
+Route::delete('/class-subjects/{class}/{subject}', [ClassSubjectController::class, 'destroy'])->name('class-subjects.destroy');
 
 
 

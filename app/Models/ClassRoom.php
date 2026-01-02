@@ -25,6 +25,15 @@ class ClassRoom extends Model
             ->pluck('session_year');
     }
 
+
+
+    public function subjects()
+{
+    return $this->belongsToMany(Subject::class, 'class_subject', 'class_id', 'subject_id');
+}
+
+
+
     public static function getSections($classId, $session = null)
     {
         $query = self::where('id', $classId);
