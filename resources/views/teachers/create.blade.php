@@ -4,12 +4,28 @@
     <div class="container">
         <h1>Add Teacher</h1>
 
+        <!-- Display Validation Errors -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('teachers.store') }}" method="POST">
             @csrf
 
             <div class="mb-3">
                 <label class="form-label">Name</label>
                 <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="user_email" class="form-control" value="{{ old('user_email') }}" required>
             </div>
 
             <div class="mb-3">
@@ -36,7 +52,6 @@
                 <input type="date" name="dob" class="form-control" value="{{ old('dob') }}">
             </div>
 
-            {{-- School dropdown --}}
             <div class="mb-3">
                 <label class="form-label">School</label>
                 <select name="school_id" class="form-select" required>

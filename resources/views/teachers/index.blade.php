@@ -6,14 +6,14 @@
         <a href="{{ route('teachers.create') }}" class="btn btn-primary mb-3">Add Teacher</a>
 
         @if ($teachers->count())
-            <table class="table table-dark table-striped">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Gender</th>
                         <th>Specialization</th>
-                        <th>School</th> <!-- added -->
+                        <th>School</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -24,13 +24,13 @@
                             <td>{{ $t->phone }}</td>
                             <td>{{ $t->gender }}</td>
                             <td>{{ $t->specialization }}</td>
-                            <td>{{ $t->school ? $t->school->name : '-' }}</td> <!-- added -->
+                            <td>{{ $t->school ? $t->school->name : '-' }}</td>
                             <td>
                                 <a href="{{ route('teachers.show', $t) }}" class="btn btn-info btn-sm">View</a>
-                                <a href="{{ route('teachers.edit', $t) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('teachers.edit', $t) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('teachers.destroy', $t) }}" method="POST" style="display:inline;">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-danger"
+                                    <button class="btn btn-danger btn-sm"
                                         onclick="return confirm('Delete?')">Delete</button>
                                 </form>
                             </td>

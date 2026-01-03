@@ -14,6 +14,12 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="user_email" class="form-control"
+                    value="{{ old('user_email', $teacher->user->email ?? '') }}" required>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label">Phone</label>
                 <input type="text" name="phone" class="form-control" value="{{ old('phone', $teacher->phone) }}">
             </div>
@@ -38,7 +44,6 @@
                 <input type="date" name="dob" class="form-control" value="{{ old('dob', $teacher->dob) }}">
             </div>
 
-            {{-- School dropdown --}}
             <div class="mb-3">
                 <label class="form-label">School</label>
                 <select name="school_id" class="form-select" required>

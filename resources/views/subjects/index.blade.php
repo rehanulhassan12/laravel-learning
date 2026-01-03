@@ -6,7 +6,7 @@
         <a href="{{ route('subjects.create') }}" class="btn btn-primary mb-3">Add Subject</a>
 
         @if ($subjects->count())
-            <table class="table table-dark table-striped">
+            <table class="table  table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
