@@ -100,9 +100,10 @@ Route::post('teacher-subjects', [TeacherSubjectController::class, 'store'])
 Route::delete('teacher-subjects/{teacher}/{subject}',
     [TeacherSubjectController::class, 'destroy']
 )->name('teacher-subjects.destroy');
-Route::resource('timetables', TimetableController::class);
 Route::get('/timetables/available-teachers', [TimetableController::class, 'availableTeachers'])
     ->name('timetables.available-teachers');
+Route::resource('timetables', TimetableController::class);
+
 
 Route::get('/class-subjects', [ClassSubjectController::class, 'index'])->name('class-subjects.index');
 Route::post('/class-subjects', [ClassSubjectController::class, 'store'])->name('class-subjects.store');

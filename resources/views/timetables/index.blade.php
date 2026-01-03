@@ -20,7 +20,7 @@
                 <tbody>
                     @foreach ($timetables as $t)
                         <tr>
-                            <td>{{ $t->class->name }}</td>
+                            <td>{{ $t->classRoom->name }}</td>
                             <td>{{ ucfirst($t->day) }}</td>
                             <td>{{ $t->period->name }} ({{ $t->period->start_time }} - {{ $t->period->end_time }})</td>
                             <td>{{ $t->subject->name }}</td>
