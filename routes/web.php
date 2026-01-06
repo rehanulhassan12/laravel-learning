@@ -17,6 +17,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherSubjectController;
 use App\Http\Controllers\TimetableController;
 use App\Http\Controllers\ClassSubjectController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,9 @@ Route::get('/', fn() => view('welcome'));
 
  Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
+// Dashboard route
+Route::get('/dashboard.index', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/get-classes', [DashboardController::class, 'getClasses'])->name('dashboard.getClasses');
 
 
 // Users resource
