@@ -114,17 +114,23 @@ Route::resource('timetables', TimetableController::class);
 Route::get('/class-subjects', [ClassSubjectController::class, 'index'])->name('class-subjects.index');
 Route::post('/class-subjects', [ClassSubjectController::class, 'store'])->name('class-subjects.store');
 Route::delete('/class-subjects/{class}/{subject}', [ClassSubjectController::class, 'destroy'])->name('class-subjects.destroy');
-Route::get('fees/create', [FeeController::class, 'create'])->name('fees.create');
+Route::get('fees/create', [FeeController::class, 'create'])->name('fees.yearly.index');
 
 Route::post('fees', [FeeController::class, 'store'])->name('fees.store');
 Route::post('fees/{id}/update', [FeeController::class, 'update'])->name('fees.update');
 
-Route::get('students/{student}/fees', [FeeController::class, 'studentFees'])->name('student.fees');
-Route::post('student_fees/{id}/paid', [FeeController::class, 'markPaid'])->name('student_fees.markPaid');
+
+
+Route::get('/fees/monthly', [FeeController::class, 'monthlyCollection'])->name('fees.monthly.index');
+
+
+Route::post('/fees/monthly/{id}/paid', [FeeController::class, 'markPaid'])->name('fees.monthly.paid');
+
+
+Route::get('/fees/confirmed', [FeeController::class, 'confirmedPayments'])->name('fees.confirmed.index');
 
 
 
-// Admin-only routes
     Route::middleware(['auth', 'is.admin'])->group(function () {
     Route::resource('roles', RoleController::class);
 
